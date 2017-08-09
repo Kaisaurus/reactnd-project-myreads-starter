@@ -19,9 +19,11 @@ All minimum functionality was added with an additional dialog that notifies the 
 2. Launch terminal in the root directory
 4. Run command 
 ```
+yarn install
 yarn start 
 ```
 or 
 ```
+npm install
 npm start
 ```
