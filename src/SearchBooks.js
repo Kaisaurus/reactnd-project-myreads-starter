@@ -7,7 +7,7 @@ class SearchBooks extends React.Component {
     onSearchBooks: PropTypes.func.isRequired,
     searchResult: PropTypes.array.isRequired,
     onShelfChange: PropTypes.func.isRequired,
-    noSearchResultMsg: PropTypes.bool.isRequired,
+    searching: PropTypes.bool.isRequired,
   }
 
   state = {
@@ -23,28 +23,23 @@ class SearchBooks extends React.Component {
     this.setState({ query });
   }
 
-  showBooks = searchResult => {
-    const books = searchResult.map(book => (
+  showBooks = searchResult =>
+    searchResult.map(book => (
       <Book
         onShelfChange={ this.onShelfChange }
         key={ book.id }
         book={ book }
       />)
     );
-    return books;
-  }
+
 
   render() {
     const { query } = this.state;
-    const { searchResult } = this.props;
-    const noSearchResultMsg = this.props.noSearchResultMsg || (
-      <h2>Couldn't find anything with those terms</h2>
-    );
-
-    let books = null;
-    if (searchResult) {
-      books = this.showBooks(searchResult);
-    }
+    const { searchResult, searching } = this.props;
+    const books = searchResult.length > 1 ? this.showBooks(searchResult) : null;
+    const searchingText = (searching && !books) ? 'Searching...' : null;
+    const notFoundText = (!!query && !books && !searching) ?
+      'Couldn\'t find anything with those search terms.' : null;
 
     return (
       <div className="search-books">
@@ -60,7 +55,10 @@ class SearchBooks extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          { noSearchResultMsg }
+          <h2>
+            { searchingText }
+            { notFoundText }
+          </h2>
           <ol className="books-grid">
             { books }
           </ol>

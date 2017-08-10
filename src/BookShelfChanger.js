@@ -7,22 +7,28 @@ class BookShelfChanger extends React.Component {
     book: PropTypes.object.isRequired,
   }
 
+  state = {
+    currentShelf: '',
+  }
+
+  componentWillMount = () => {
+    this.setState({ currentShelf: this.props.book.shelf ? this.props.book.shelf : 'none' });
+  }
+
   clickShelfChange = e => {
     const clickedShelf = e.target.value;
-    if (this.props.book.shelf !== clickedShelf) {
-      this.props.onShelfChange(clickedShelf);
+    const { book } = this.props;
+    if (book.shelf !== clickedShelf) {
+      this.props.onShelfChange(book, clickedShelf);
     }
   }
 
   render() {
-    let { shelf } = this.props.book;
-    if (!shelf) {
-      shelf = 'none';
-    }
+    let { currentShelf } = this.state;
 
     return (
       <div className="book-shelf-changer">
-        <select onChange={ this.clickShelfChange } defaultValue={ shelf }>
+        <select onChange={ this.clickShelfChange } defaultValue={ currentShelf }>
           <option value="none" disabled>Move to... </option>
           <option value="currentlyReading">Currently Reading</option>
           <option value="wantToRead">Want to Read</option>

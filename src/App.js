@@ -11,7 +11,7 @@ class BooksApp extends React.Component {
   state = {
     myBooks: [],
     searchResult: [],
-    noSearchResultMsg: true,
+    searching: false,
   }
 
   componentDidMount() {
@@ -29,15 +29,15 @@ class BooksApp extends React.Component {
       this.setState({ searchResult: [] });
     } else {
       // Search for books
+      this.setState({ searching: true });
       BooksAPI.search(query, 20)
         .then(searchResult => {
-          if (searchResult.length >= 1) {
-            this.setState({ searchResult });
-            this.setState({ noSearchResultMsg: true });
-          } else {
+          if (searchResult.error) {
             this.setState({ searchResult: [] });
-            this.setState({ noSearchResultMsg: false });
+          } else {
+            this.setState({ searchResult });
           }
+          this.setState({ searching: false });
         })
         .catch((err) => {
           this.showAlert(`Wops.. something went wrong with the search. Error: ${err.message}`);
@@ -55,9 +55,8 @@ class BooksApp extends React.Component {
         );
         // add the changed book to newMyBooks if a shelf is set
         if (shelf !== 'none') {
-          const updatedBook = changedBook;
-          updatedBook.shelf = shelf;
-          newMyBooks.push(updatedBook);
+          // note to self 'spread in object literal'
+          newMyBooks.push({ ...changedBook, shelf });
         }
         this.setState({ myBooks: newMyBooks });
       })
@@ -82,7 +81,7 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    const { myBooks, searchResult, noSearchResultMsg } = this.state;
+    const { myBooks, searchResult, searching } = this.state;
     return (
       <div className="app">
         <Header />
@@ -91,7 +90,7 @@ class BooksApp extends React.Component {
               onSearchBooks={ this.onSearchBooks }
               onShelfChange={ this.onShelfChange }
               searchResult={ searchResult }
-              noSearchResultMsg={ noSearchResultMsg }
+              searching={ searching }
             />
           )}
         />

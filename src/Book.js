@@ -8,12 +8,8 @@ class Book extends React.Component {
     onShelfChange: PropTypes.func.isRequired,
   }
 
-  onShelfChange = shelf => {
-    this.props.onShelfChange(this.props.book, shelf);
-  }
-
   render() {
-    const { book } = this.props;
+    const { book, onShelfChange } = this.props;
 
     // work around to prevent undefined imageLinks to give errors
     const imageLinks = book.imageLinks || '';
@@ -30,7 +26,10 @@ class Book extends React.Component {
                 height: 193,
                 backgroundImage: `url(${thumbnail})` }}
             ></div>
-            <BookShelfChanger book={ book } onShelfChange={ this.onShelfChange } />
+            <BookShelfChanger
+              book={ book }
+              onShelfChange={ onShelfChange }
+            />
           </div>
           <div className="book-title">{ book.title }</div>
           <div className="book-authors">{ book.authors }</div>
