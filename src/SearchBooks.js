@@ -36,7 +36,13 @@ class SearchBooks extends React.Component {
   render() {
     const { query } = this.state;
     const { searchResult, searching } = this.props;
-    const books = searchResult.length > 1 ? this.showBooks(searchResult) : null;
+
+    /*
+    I am checking for array length instead of "error" object because I made App.js so it always passes an array.
+    This is made this way because it was recommended to always pass the same data type. In this case an Array.
+    I feel like passing the error object directly from the API would break this recommended practice... Let me know if I am wrong here...
+    */
+    const books = searchResult.length ? this.showBooks(searchResult) : null;
     const searchingText = (searching && !books) ? 'Searching...' : null;
     const notFoundText = (!!query && !books && !searching) ?
       'Couldn\'t find anything with those search terms.' : null;

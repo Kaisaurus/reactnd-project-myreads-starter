@@ -7,14 +7,6 @@ class BookShelfChanger extends React.Component {
     book: PropTypes.object.isRequired,
   }
 
-  state = {
-    currentShelf: '',
-  }
-
-  componentWillMount = () => {
-    this.setState({ currentShelf: this.props.book.shelf ? this.props.book.shelf : 'none' });
-  }
-
   clickShelfChange = e => {
     const clickedShelf = e.target.value;
     const { book } = this.props;
@@ -24,7 +16,7 @@ class BookShelfChanger extends React.Component {
   }
 
   render() {
-    let { currentShelf } = this.state;
+    const currentShelf = this.props.book.shelf ? this.props.book.shelf : 'none';
 
     return (
       <div className="book-shelf-changer">

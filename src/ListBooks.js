@@ -17,25 +17,23 @@ class ListBooks extends React.Component {
 
   render() {
     const { books, onShelfChange } = this.props;
+    const shelves = {
+      currentlyReading: 'Currently Reading',
+      wantToRead: 'Want To Read',
+      read: 'Read',
+    };
 
     return (
     <div className="list-books">
       <div className="list-books-content">
-        <BookShelf
-          onShelfChange={ onShelfChange }
-          books={ this.filterShelf(books, 'currentlyReading') }
-          shelfTitle="Currently Reading"
-        />
-        <BookShelf
-          onShelfChange={ onShelfChange }
-          books={ this.filterShelf(books, 'wantToRead') }
-          shelfTitle="Want To Read"
-        />
-        <BookShelf
-          onShelfChange={ onShelfChange }
-          books={ this.filterShelf(books, 'read') }
-          shelfTitle="Read"
-        />
+        { Object.keys(shelves).map(key =>
+          <BookShelf
+            onShelfChange={ onShelfChange }
+            books={ this.filterShelf(books, key) }
+            shelfTitle={ shelves[key] }
+            key={ key }
+          />
+        )}
       </div>
       <div className="open-search">
         <Link to="/search">Add a book</Link>

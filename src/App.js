@@ -31,10 +31,16 @@ class BooksApp extends React.Component {
       // Search for books
       this.setState({ searching: true });
       BooksAPI.search(query, 20)
-        .then(searchResult => {
-          if (searchResult.error) {
+        .then(rawSearchResult => {
+          if (rawSearchResult.error) {
             this.setState({ searchResult: [] });
           } else {
+            // this matches rawSearchResult with the books on the shelf
+            // if they are on the shelf it adds the shelf property
+            const searchResult = rawSearchResult.map(book => {
+              const shelfBook = this.state.myBooks.find(myBook => myBook.id === book.id);
+              return shelfBook ? { ...book, shelf: shelfBook.shelf } : book;
+            });
             this.setState({ searchResult });
           }
           this.setState({ searching: false });
